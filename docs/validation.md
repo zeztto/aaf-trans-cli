@@ -20,6 +20,16 @@ python3 -m venv .venv
 
 pytest는 source coverage 80% 이상의 gate를 유지합니다. 의존성 범위와 실제 설치 버전은 다를 수 있으므로 보안 감사는 설치한 정확한 버전을 기준으로 별도로 확인해야 합니다.
 
+## CI 재현과 등록 확인 · 2026-10-28
+
+CI와 같은 Python 3.13 계열의 새 가상 환경에서 dependency 설치, `pip check`, Ruff, pytest와 CLI version 명령을 실행했습니다. Python 3.13.7에서 **51 passed, 0 failed, 0 skipped**, source coverage **89.25%**로 기존 80% gate를 통과했습니다. 로컬 macOS의 결과이며 GitHub의 Linux 실행 결과와 구별합니다.
+
+기존 workflow는 actionlint 1.7.12에서 진단 없이 통과했습니다. GitHub API에서는 Actions가 활성화돼 있고 모든 action을 허용하지만 workflow·run·head check가 0개인 상태를 확인했습니다. 이 사실만으로 원인을 YAML 오류나 기본 branch 부재로 단정하지 않습니다.
+
+동일한 job을 `python-ci.yml`로 옮기고 기존 push·pull request trigger에 `workflow_dispatch`를 추가했습니다. 새 파일 경로를 한 번 등록해 관찰하고, 이후 수동 재실행 경로를 제공합니다. 수동 trigger는 workflow 파일이 기본 branch에 있어야 사용할 수 있습니다. [GitHub 공식 조건](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/manually-run-a-workflow)
+
+GitHub workflow의 등록과 실제 성공은 별도로 확인하며, 로컬 검사나 trigger 추가만으로 CI 성공을 주장하지 않습니다.
+
 ## 공개 준비 시 실행 기록
 
 2026-10-27, 새 virtual environment에서 `pip install -e '.[dev]'` 후 확인했습니다. 개발 환경의 pip도 `26.2.2`로 갱신해 추가 점검했습니다. 아래 결과는 제품 코드의 synthetic 회귀이며, dependency advisory 감사는 설치된 전체 환경을 기준으로 별도로 수행합니다.

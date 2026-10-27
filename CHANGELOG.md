@@ -1,5 +1,11 @@
 # 변경 기록
 
+## CI 유지관리 - 2026-10-28
+
+- 기존 CI를 `python-ci.yml`로 옮기고 push·pull request trigger와 함께 수동 `workflow_dispatch` trigger를 제공합니다. 적용 조건과 등록 확인 범위를 검증 안내에 기록했습니다.
+- 새 Python 3.13 환경에서 기존 CI 명령을 재현해 51개 회귀와 coverage 89.25%를 확인했습니다. 앱 source·test·제품 버전은 변경하지 않았습니다.
+- GitHub의 workflow 등록·실행 성공은 로컬 검사 결과와 별도로 확인합니다.
+
 ## 0.4.2 - 2026-10-27
 
 - GitHub CI 등록을 정상 push 이벤트로 다시 시도하기 위해 버전 metadata와 문서를 갱신했습니다.
