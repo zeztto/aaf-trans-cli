@@ -1,6 +1,6 @@
 # 검증 안내
 
-기준 버전: **0.4.1**. 이 문서는 구현·테스트의 범위를 설명하며 모든 AAF·DAW의 호환성이나 무결점 보안을 보증하지 않습니다.
+기준 버전: **0.4.2**. 이 문서는 구현·테스트의 범위를 설명하며 모든 AAF·DAW의 호환성이나 무결점 보안을 보증하지 않습니다. 0.4.2는 CI 등록 재시도를 위한 metadata 갱신이며 기능 코드·회귀 테스트·의존성은 0.4.1과 동일합니다.
 
 ## 합성 데이터만 사용
 
@@ -32,7 +32,7 @@ pytest는 source coverage 80% 이상의 gate를 유지합니다. 의존성 범�
 | source coverage | 89.25%, 80% gate 통과 |
 | Ruff | `src tests` 검사 통과 |
 | 의존성 일관성 | `pip check` 통과 |
-| CLI | `--help`와 `--version` 실행, `aaf-trans 0.4.1` 확인 |
+| CLI | `--help`와 `--version` 실행, `aaf-trans 0.4.2` 확인 |
 | wheel | 빌드 및 자체 MIT·pyaaf2 라이선스 고지 포함 확인 |
 
 원본 보호 회귀의 최초 실행에서는 새 테스트 6건이 실패했고, batch 사전 검사를 적용한 뒤 통과했습니다. 추가한 Windows 예약 marker 세 경우와 Unicode 정규화가 동등한 출력의 overwrite·dry-run 두 경우도 수정 전 실패를 확인했습니다. 이 기록은 advisory 감사나 실제 DAW 호환성 확인을 대신하지 않습니다.

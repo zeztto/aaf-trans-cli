@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "aaf-trans"
-version = "0.4.1"
+version = "0.4.2"
 description = "Nuendo AAF timeline and embedded PCM metadata normalizer"
 readme = "README.md"
 license = "MIT"

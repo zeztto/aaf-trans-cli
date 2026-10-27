@@ -4,7 +4,7 @@
 
 변환은 원본의 복제본에서 수행하며, 결과의 타임라인 구조와 내장 오디오 지문을 비교합니다. 지원 범위 밖이거나 모호한 상태는 추정해서 수정하지 않습니다.
 
-버전: **0.4.1** · Python **3.10 이상** · [MIT](LICENSE) · [보안 경계](SECURITY.md) · [검증 안내](docs/validation.md)
+버전: **0.4.2** · Python **3.10 이상** · [MIT](LICENSE) · [보안 경계](SECURITY.md) · [검증 안내](docs/validation.md)
 
 ## 기능
 
