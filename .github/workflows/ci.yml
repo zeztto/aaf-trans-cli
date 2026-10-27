@@ -1,0 +1,38 @@
+name: CI
+
+"on":
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.13"
+      - name: Update pip to reviewed security release
+        run: python -m pip install --no-cache-dir --upgrade 'pip==26.2.2'
+      - name: Install development dependencies
+        run: python -m pip install --no-cache-dir '.[dev]'
+      - name: Check installed dependency compatibility
+        run: python -m pip check
+      - name: Lint
+        run: python -m ruff check src tests
+      - name: Test
+        run: python -m pytest tests
+      - name: Check CLI
+        run: python -m aaf_trans --version

@@ -1,0 +1,40 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "aaf-trans"
+version = "0.4.1"
+description = "Nuendo AAF timeline and embedded PCM metadata normalizer"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md", "THIRD_PARTY_LICENSES/*.txt"]
+authors = [{ name = "Sungwoon Jeon" }]
+requires-python = ">=3.10"
+dependencies = [
+  "pyaaf2>=1.7.1,<2",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=9.0.3,<10",
+  "pytest-cov>=7,<8",
+  "ruff>=0.9,<1",
+]
+
+[project.scripts]
+aaf-trans = "aaf_trans.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/aaf_trans"]
+
+[tool.pytest.ini_options]
+addopts = "-ra --cov=aaf_trans --cov-report=term-missing --cov-fail-under=80"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
