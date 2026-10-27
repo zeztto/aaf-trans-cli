@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import os
 from pathlib import Path
+from stat import S_IMODE
 from types import SimpleNamespace
 
 import pytest
@@ -137,6 +139,36 @@ def test_convert_repairs_copy_and_preserves_source(make_aaf, tmp_path: Path) -> 
     assert before.timeline_fingerprint == after.timeline_fingerprint
     assert result.output_report is not None
     assert result.output_report.path == output
+
+
+@pytest.mark.skipif(os.name != "posix", reason="POSIX file permission semantics")
+@pytest.mark.parametrize("source_mode", [0o444, 0o400, 0o644], ids=["0444", "0400", "0644"])
+def test_convert_preserves_source_mode_and_uses_private_output(
+    make_aaf,
+    tmp_path: Path,
+    source_mode: int,
+) -> None:
+    source = make_aaf(with_embedded_pcm=True, missing_primary_timecode=True)
+    source.chmod(source_mode)
+    source_hash = sha256_file(source)
+    before = analyze_aaf(source, include_essence_fingerprint=True)
+    output = tmp_path / "output" / "converted.aaf"
+
+    result = convert_aaf(source, output)
+
+    assert result.status == "converted"
+    assert result.sequences_fixed == 1
+    assert result.primary_timecode_tracks_added == 1
+    assert sha256_file(source) == source_hash
+    assert S_IMODE(source.stat().st_mode) == source_mode
+    assert analyze_aaf(source).compatible is False
+    assert S_IMODE(output.stat().st_mode) == 0o600
+    after = analyze_aaf(output, include_essence_fingerprint=True)
+    assert after.compatible is True
+    assert after.media_timeline_structure_fingerprint == before.media_timeline_structure_fingerprint
+    assert before.essence_fingerprint is not None
+    assert after.essence_fingerprint == before.essence_fingerprint
+    assert not list(output.parent.glob(f".{output.name}.*.aaf"))
 
 
 def test_convert_repairs_embedded_pcm_metadata(make_aaf, tmp_path: Path) -> None:

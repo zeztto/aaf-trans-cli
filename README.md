@@ -4,7 +4,7 @@
 
 변환은 원본의 복제본에서 수행하며, 결과의 타임라인 구조와 내장 오디오 지문을 비교합니다. 지원 범위 밖이거나 모호한 상태는 추정해서 수정하지 않습니다.
 
-버전: **0.4.2** · Python **3.10 이상** · [MIT](LICENSE) · [보안 경계](SECURITY.md) · [검증 안내](docs/validation.md)
+버전: **0.4.3** · Python **3.10 이상** · [MIT](LICENSE) · [보안 경계](SECURITY.md) · [검증 안내](docs/validation.md)
 
 ## 기능
 
@@ -28,7 +28,7 @@ python3 -m venv .venv
 .venv/bin/aaf-trans --version
 ```
 
-Windows에서는 `.venv/Scripts/python.exe`와 `.venv/Scripts/aaf-trans.exe`를 사용합니다. 이번 공개 검증은 macOS의 Python 3.14에서 수행했으며 Windows 실행은 별도 검증하지 않았습니다.
+Windows에서는 `.venv/Scripts/python.exe`와 `.venv/Scripts/aaf-trans.exe`를 사용합니다. macOS의 Python 3.13·3.14 로컬 검사와 GitHub의 Linux/Python 3.13 CI 결과는 [검증 안내](docs/validation.md)에서 source revision별로 구별합니다. Windows 실행은 별도 검증하지 않았습니다.
 
 ## 사용
 
@@ -52,6 +52,7 @@ aaf-trans convert input-directory --recursive -o converted --json
 - directory 탐색은 기본 출력 marker인 `.nuendo`가 붙은 파일을 제외합니다. 명시적으로 선택한 파일은 검사 대상이지만 batch의 다른 입력을 출력으로 삼을 수 없습니다.
 - `--marker`로 출력 접미사를 바꿀 수 있습니다. 빈 값·`.`·`..`·경로 구분자·제어 문자·Windows 예약 문자는 허용하지 않습니다.
 - 기존 출력은 기본적으로 보존합니다. 필요한 경우에만 `--overwrite`를 사용하세요. 이 옵션도 선택한 입력 파일이나 그 symlink·hardlink 별칭을 덮어쓰도록 허용하지 않습니다.
+- 읽을 수 있는 읽기 전용 입력도 변환할 수 있습니다. 원본 content·권한·수정 시각은 보존하고, POSIX 출력은 owner만 읽고 쓸 수 있는 `0600`으로 만듭니다. 원본의 권한·수정 시각·확장 속성을 출력으로 복제하지 않습니다.
 - batch 출력 이름이 대소문자나 Unicode 정규화(NFC/NFD)만 다른 경우도 거부합니다. case-sensitive 환경에서도 같은 기준을 적용해 다른 볼륨·운영체제로 이동할 때의 충돌을 줄입니다.
 - `--skip-essence-hash`는 오디오 지문 검증을 생략합니다. 성능보다 검증이 중요하다면 기본값을 유지하세요.
 

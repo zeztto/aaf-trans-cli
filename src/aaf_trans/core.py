@@ -776,7 +776,8 @@ def convert_aaf(
     temporary = Path(temporary_name)
 
     try:
-        shutil.copy2(source, temporary)
+        # Preserve mkstemp's private, writable mode even for read-only inputs.
+        shutil.copyfile(source, temporary)
         sequences_changed = 0
         usage_codes_changed = 0
         timecode_tracks_changed = 0
